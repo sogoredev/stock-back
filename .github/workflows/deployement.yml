@@ -32,7 +32,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Generate and push image
-        script:
+        run: |
           mvn spring-boot:build-image \
           -Ddocker.publishRegistry.username=${{ secrets.DCK_USERNAME }} \
           -Ddocker.publishRegistry.password=${{ secrets.DCK_PASSWORD }} \
