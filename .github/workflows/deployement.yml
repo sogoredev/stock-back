@@ -29,12 +29,12 @@ jobs:
       - name: setup java version
       - uses: actions/setup-java@v4
         with:
-          distribution: 'temurin' #test
+          distribution: 'temurin'
           java-version: '17'
       - name: Generate and push image
         run: |
           ./mvnw clean package spring-boot:build-image \
-          -Ddocker.publishRegistry.username=${{ secrets.DCK_USERNAME }} \
-          -Ddocker.publishRegistry.password=${{ secrets.DCK_PASSWORD }} \
+          -Ddocker.publishRegistry.username=${{secrets.DCK_USERNAME}} \
+          -Ddocker.publishRegistry.password=${{secrets.DCK_PASSWORD}} \
           -Dspring-boot.build-image.publish=true \
           -Dmaven.test.skip=true
