@@ -1,26 +1,13 @@
 name: deploy stock back
-
-on:
-  push:
-    branches:
-      - main
-
+on: [push]
 jobs:
+
   create-folder:
     name: create folder
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Debug SSH connection
-        run: |
-          echo "Débogage SSH :"
-          ssh -v -i ${{ secrets.PRIVATE_KEY }} -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} "echo 'Connexion réussie !'"
-
-      - name: Execute commands on VPS
-        uses: appleboy/ssh-action@v1.0.3
+      - name: execute commands
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -28,6 +15,6 @@ jobs:
           port: 22
           script: |
             echo "Création du dossier sur le serveur..."
-            mkdir -p /opt/applications/stock/Gestion-de-stock
+            mkdir -p /opt/applications/stock/stock-back
             echo "Liste des fichiers :"
             ls -al /opt/applications/stock/
