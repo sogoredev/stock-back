@@ -1,13 +1,26 @@
 name: deploy stock back
-on: [push]
-jobs:
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
   create-folder:
     name: create folder
     runs-on: ubuntu-latest
+
     steps:
-      - name: execute commands
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Debug SSH connection
+        run: |
+          echo "Débogage SSH :"
+          ssh -v -i ${{ secrets.PRIVATE_KEY }} -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} "echo 'Connexion réussie !'"
+
+      - name: Execute commands on VPS
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
