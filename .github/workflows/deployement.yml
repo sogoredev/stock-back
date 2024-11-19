@@ -6,7 +6,7 @@ jobs:
     name: create folder
     runs-on: ubuntu-latest
     steps:
-      - name: executing commands
+      - name: execute commands
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
