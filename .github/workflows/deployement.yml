@@ -18,3 +18,23 @@ jobs:
             mkdir -p /opt/applications/stock/stock-back
             echo "Liste des fichiers :"
             ls -al /opt/applications/stock/
+
+  generate-image:
+    name: generate image
+    runs-on: ubuntu-latest
+    needs: ['create-folder']
+    steps:
+      - name: cloner le repertoire
+        uses: actions/checkout@master
+      - name: setup java version
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Generate and push image
+        script:
+          mvn spring-boot:build-image \
+          -Ddocker.publishRegistry.username=${{ secrets.DCK_USERNAME }} \
+          -Ddocker.publishRegistry.password=${{ secrets.DCK_PASSWORD }} \
+          -Dspring-boot.build-image.publish=true \
+          -Dmaven.test.skip=true
