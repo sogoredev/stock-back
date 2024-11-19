@@ -14,5 +14,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
-            mkdir /opt/applications/stock/Gestion-de-stock
+            echo "Création du dossier sur le serveur..."
+            mkdir -p /opt/applications/stock/Gestion-de-stock
+            echo "Liste des fichiers :"
             ls -al /opt/applications/stock/
