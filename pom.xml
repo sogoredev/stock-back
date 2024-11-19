@@ -101,11 +101,17 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<name>com.gds/${project.artifactId}:${project.artifactId}</name>
+						<name>com.gds/${project.artifactId}:${project.version}</name>
 						<env>
 							<BP_JVM_VERSION>17</BP_JVM_VERSION>
 						</env>
 					</image>
+					<docker>
+						<publishRegistry>
+							<username>${docker.publishRegistry.username}</username>
+							<password>${docker.publishRegistry.password}</password>
+						</publishRegistry>
+					</docker>
 					<excludes>PASSWORD
 						<exclude>
 							<groupId>org.projectlombok</groupId>
