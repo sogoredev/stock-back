@@ -1,0 +1,16 @@
+services:
+  stock-back:
+    image: sogoredev/stock-back:3.3.1
+    container_name: stock-back
+    restart: always
+    environment:
+      - spring.datasource.url=${secrets.DB_HOST}
+      - spring.datasource.username=${secrets.DB_USERNAME}
+      - spring.datasource.password=${secrets.DB_PASSWORD}
+    networks:
+      - applications-network
+
+networks:
+  applications-network:
+    external: true
+    name: applications-network
