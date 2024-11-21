@@ -101,7 +101,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<name>com.gds/${project.artifactId}:${project.version}</name>
+						<name>sogoredev/${project.artifactId}:${project.version}</name>
 						<env>
 							<BP_JVM_VERSION>17</BP_JVM_VERSION>
 						</env>
