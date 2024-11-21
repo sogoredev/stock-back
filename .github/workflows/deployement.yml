@@ -31,7 +31,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Generate and push image
+      - name: Generer and push image
         run: |
           ./mvnw clean package spring-boot:build-image \
           -Ddocker.publishRegistry.username=${{secrets.DCK_USERNAME}} \
