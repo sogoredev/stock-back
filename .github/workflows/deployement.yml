@@ -34,15 +34,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DCK_USERNAME }}
-          password: ${{ secrets.DCK_PASSWORD }}
       - name: Generer and push image
         run: |
           ./mvnw clean package spring-boot:build-image \
-          -Dspring-boot.build-image.imageName=docker.io/sogoredev/gestion-de-produit:0.0.1-SNAPSHOT \
+#          -Dspring-boot.build-image.imageName=docker.io/sogoredev/gestion-de-produit:0.0.1-SNAPSHOT \
           -Ddocker.publishRegistry.username=${{secrets.DCK_USERNAME}} \
           -Ddocker.publishRegistry.password=${{secrets.DCK_PASSWORD}} \
           -Dspring-boot.build-image.publish=true \
@@ -51,7 +46,7 @@ jobs:
   run-container:
     name: generer un container
     runs-on: ubuntu-latest
-    needs: [ 'create-folder', 'generate-image' ]
+    needs: [ 'create-folder','generate-image' ]
     steps:
       - name: cloner le repertoire
         uses: actions/checkout@master
