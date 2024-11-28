@@ -1,9 +1,8 @@
 name: deploy stock back
 on: [push]
 env:
-  IMAGE: gestion-de-produit
-  VERSION: 0.0.1-SNAPSHOT
-  REGISTRY: docker.io
+  IMAGE: stock-back
+  VERSION: 3.3.1
 jobs:
 
   create-folder:
@@ -24,40 +23,34 @@ jobs:
             ls -al /opt/applications/stock/
 
   generate-image:
-    name: Generate and push Docker image
+    name: generer une image
     runs-on: ubuntu-latest
     needs: ['create-folder']
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Java
+      - name: cloner le repertoire
+        uses: actions/checkout@master
+      - name: setup java version
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DCK_USERNAME }}
-          password: ${{ secrets.DCK_PASSWORD }}
-
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: ${{env.REGISTRY}}/${{secrets.DCK_USERNAME}}/${{env.IMAGE}}:${{env.VERSION}}
-          build-args: |
-            MAVEN_CLI_OPTS=-Dmaven.test.skip=true
-            SPRING_PROFILES_ACTIVE=prod
+      - name: Generer and push image
+        run: |
+          ./mvnw clean package spring-boot:build-image \
+          -Dspring-boot.build-image.imageName=docker.io/sogoredev/gestion-de-produit:0.0.1-SNAPSHOT \
+          -Ddocker.publishRegistry.username=${{secrets.DCK_USERNAME}} \
+          -Ddocker.publishRegistry.password=${{secrets.DCK_PASSWORD}} \
+          -Dspring-boot.build-image.publish=true \
+          -Dmaven.test.skip=true
 
   run-container:
-    name: Run Docker container
+    name: generer un container
     runs-on: ubuntu-latest
-    needs: ['create-folder', 'generate-image']
+    needs: [ 'create-folder','generate-image' ]
     steps:
-      - name: Copy docker-compose file via SSH
+      - name: cloner le repertoire
+        uses: actions/checkout@master
+      - name: copy file via ssh key
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
@@ -66,8 +59,7 @@ jobs:
           port: 22
           source: "compose.yml"
           target: /opt/applications/stock/${{env.IMAGE}}
-
-      - name: Start Docker container
+      - name: execute commands to run container
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
