@@ -1,6 +1,6 @@
 services:
   stock-back:
-    image: sogoredev/stock-back:3.3.1
+    image: docker.io/sogoredev/gestion-de-produit:0.0.1-SNAPSHOT
     container_name: stock-back
     restart: always
     environment:
