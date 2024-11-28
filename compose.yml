@@ -4,9 +4,9 @@ services:
     container_name: stock-back
     restart: always
     environment:
-      - spring.datasource.url=${secrets.DB_HOST}
-      - spring.datasource.username=${secrets.DB_USERNAME}
-      - spring.datasource.password=${secrets.DB_PASSWORD}
+      - spring.datasource.url=${DB_HOST}
+      - spring.datasource.username=${DB_USERNAME}
+      - spring.datasource.password=${DB_PASSWORD}
     networks:
       - applications-network
 
