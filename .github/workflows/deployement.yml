@@ -37,7 +37,6 @@ jobs:
       - name: Generer and push image
         run: |
           ./mvnw clean package spring-boot:build-image \
-#          -Dspring-boot.build-image.imageName=docker.io/sogoredev/gestion-de-produit:0.0.1-SNAPSHOT \
           -Ddocker.publishRegistry.username=${{secrets.DCK_USERNAME}} \
           -Ddocker.publishRegistry.password=${{secrets.DCK_PASSWORD}} \
           -Dspring-boot.build-image.publish=true \
