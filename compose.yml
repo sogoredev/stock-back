@@ -2,7 +2,7 @@ services:
   stock-back:
     image: docker.io/sogoredev/gestion-de-produit:0.0.1-SNAPSHOT
     ports:
-      - "8080:8080"
+      - "8082:8082"
     container_name: stock-back
     restart: always
     environment:
