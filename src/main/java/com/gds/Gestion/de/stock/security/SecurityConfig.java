@@ -17,7 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.http.HttpMethod.*;
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -40,21 +39,24 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("http://stock-back:8080").permitAll()
 
-                        .requestMatchers(POST,"/user/creer").hasRole("SUPER_ADMIN")
+                        // Gestion des utilisateurs
+                        .requestMatchers(POST, "/user/creer").hasRole("SUPER_ADMIN")
                         .requestMatchers(PUT, "/user/modifier/{idUser}").hasRole("SUPER_ADMIN")
                         .requestMatchers(DELETE, "/user/supprimer/{idUser}").hasRole("SUPER_ADMIN")
                         .requestMatchers(GET, "/user/{idUser}").hasRole("SUPER_ADMIN")
                         .requestMatchers(GET, "/user/userListe").hasRole("SUPER_ADMIN")
-                        .requestMatchers(GET, "/user/userListe").hasRole("SUPER_ADMIN")
                         .requestMatchers(GET, "/user/roleListe").hasRole("SUPER_ADMIN")
 
+                        // Gestion des catégories
                         .requestMatchers(POST, "/categorie/creerCat").hasAnyRole("SUPER_ADMIN", "ADMIN")
                         .requestMatchers(PUT, "/categorie/modifierCat/{idCat}").hasAnyRole("SUPER_ADMIN", "ADMIN")
                         .requestMatchers(PUT, "/categorie/supprimerCat").hasAnyRole("SUPER_ADMIN", "ADMIN")
                         .requestMatchers(GET, "/categorie/afficherCat/{idCat}").hasAnyRole("SUPER_ADMIN", "ADMIN")
                         .requestMatchers(GET, "/categorie/listeCat").hasAnyRole("SUPER_ADMIN", "ADMIN")
 
+                        // Gestion des produits
                         .requestMatchers(POST, "/produit/enregistrerProd").hasAnyRole("SUPER_ADMIN", "ADMIN")
                         .requestMatchers(PUT, "/produit/modifierProd/{idProd}").hasAnyRole("SUPER_ADMIN", "ADMIN")
                         .requestMatchers(PUT, "/produit/supprimerProd").hasAnyRole("SUPER_ADMIN", "ADMIN")
@@ -62,6 +64,7 @@ public class SecurityConfig {
                         .requestMatchers(GET, "/produit/listeProd").hasAnyRole("SUPER_ADMIN", "ADMIN")
                         .requestMatchers(GET, "/produit/afficherProdSansStock").hasAnyRole("SUPER_ADMIN", "ADMIN")
 
+                        // Gestion des ventes
                         .requestMatchers(POST, "/vente/effectuerVente").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(POST, "/vente/annulerVente").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(PUT, "/vente/modifier/{idVente}").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
@@ -71,6 +74,7 @@ public class SecurityConfig {
                         .requestMatchers(GET, "/vente/totalVente").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(PUT, "/vente/supprimerVente").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
 
+                        // Gestion des clients
                         .requestMatchers(POST, "/client/ajouterClient").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(GET, "/client/listeClient").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(GET, "/client/totalClient").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
@@ -78,6 +82,7 @@ public class SecurityConfig {
                         .requestMatchers(GET, "/client/afficherClient/{idClient}").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(GET, "/client/supprimerClient").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
 
+                        // Gestion des approvisionnements
                         .requestMatchers(POST, "/approvision/creerApprov").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(POST, "/approvision/traiterApprov").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(GET, "/approvision/listeApprov").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
@@ -85,6 +90,7 @@ public class SecurityConfig {
                         .requestMatchers(GET, "/approvision/afficherApprov/{idApprov}").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(PUT, "/approvision/supprimerApprov").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
 
+                        // Gestion des dettes
                         .requestMatchers(POST, "/dette/enregistrerDette").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(GET, "/dette/listeDette").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(PUT, "/dette/modifierDette/{idDette}").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
@@ -92,12 +98,12 @@ public class SecurityConfig {
                         .requestMatchers(PUT, "/dette/payerDette").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
                         .requestMatchers(PUT, "/dette/supprimerDette").hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
 
-                        .anyRequest().authenticated())
-                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                        .addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -106,11 +112,9 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return daoAuthenticationProvider;
     }
-
-
 }
