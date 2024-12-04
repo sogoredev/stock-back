@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/stock-back:8082/").permitAll()
+                        .requestMatchers("**").permitAll()
 
                         // Gestion des utilisateurs
                         .requestMatchers(POST, "/user/creer").hasRole("SUPER_ADMIN")
