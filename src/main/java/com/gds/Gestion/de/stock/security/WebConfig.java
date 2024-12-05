@@ -12,11 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4200", "http://api.stock.g2sservice.com")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedOrigins("*") // Autoriser toutes les origines
+                .allowedMethods("*") // Autoriser toutes les méthodes HTTP
+                .allowedHeaders("*") // Autoriser tous les en-têtes
+                .allowCredentials(false); // Désactiver les cookies pour éviter les conflits
     }
-
-
 }
