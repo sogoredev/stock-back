@@ -42,8 +42,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/stock-database:8080/api").permitAll()
-                        .requestMatchers("/api").permitAll()
+                        .requestMatchers("/stock-database:8080/api").permitAll()  // Assurez-vous que toutes les routes nécessaires sont autorisées
+                        .requestMatchers("/api/**").permitAll()  // Par exemple, autoriser toutes les requêtes API
 
                         // Gestion des utilisateurs
                         .requestMatchers(POST, "/user/creer").hasRole("SUPER_ADMIN")

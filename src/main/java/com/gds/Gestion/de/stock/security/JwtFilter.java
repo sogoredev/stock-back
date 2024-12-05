@@ -28,6 +28,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String origin = request.getHeader("Origin");
+        if (origin != null && origin.equals("http://stock-proxy")) { // Vérifiez l'origine du proxy
+            filterChain.doFilter(request, response); // Ignorez le filtre pour ces requêtes
+            return;
+        }
+
+
         String token;
         String username = null;
         boolean isTokenExpired = true;
