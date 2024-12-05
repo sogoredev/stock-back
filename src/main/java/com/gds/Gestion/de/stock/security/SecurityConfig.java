@@ -42,8 +42,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/stock-database:8080/api").permitAll()  // Assurez-vous que toutes les routes nécessaires sont autorisées
-                        .requestMatchers("/api/**").permitAll()  // Par exemple, autoriser toutes les requêtes API
+                        .requestMatchers("http://stock-back:8080/stock").permitAll()
 
                         // Gestion des utilisateurs
                         .requestMatchers(POST, "/user/creer").hasRole("SUPER_ADMIN")
@@ -125,7 +124,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://stock-proxy"));
+        configuration.setAllowedOrigins(Arrays.asList("http://stock-back:8080/stock"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
