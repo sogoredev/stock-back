@@ -120,5 +120,4 @@ public class SecurityConfig {
         daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return daoAuthenticationProvider;
     }
-    System.out.println("Security filter chain configured successfully");
 }
