@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   stock-back:
     image: docker.io/sogoredev/gestion-de-produit:0.0.1-SNAPSHOT
@@ -32,7 +30,7 @@ services:
     container_name: stock-proxy
     restart: always
     ports:
-      - 822:80
+      - 82:80
     volumes:
       - ./db-stock.conf:/etc/nginx/conf.d/db-stock.conf
       - ./api-stock.conf:/etc/nginx/conf.d/api-stock.conf
