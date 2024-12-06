@@ -4,36 +4,10 @@ services:
     container_name: stock-back
     restart: always
     environment:
-      - spring.datasource.url=jdbc:mysql://stock-database:3306/stock
-      - spring.datasource.username=stock
-      - spring.datasource.password=StockBackend@2024ml
+      - spring.datasource.url=${DB_HOST}
+      - spring.datasource.username=${DB_USERNAME}
+      - spring.datasource.password=${DB_PASSWORD}
       - JAVA_TOOL_OPTIONS=-Xss200K
-    networks:
-      - applications-network
-
-  stock-database:
-    image: mysql:8.0
-    container_name: stock-database
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=StockBackend@2024ml
-      - MYSQL_DATABASE=stock
-      - MYSQL_USER=stock
-      - MYSQL_PASSWORD=StockBackend@2024ml
-    ports:
-      - "3306:3306"
-    networks:
-      - applications-network
-
-  proxy:
-    image: nginx:1.23.3-alpine
-    container_name: stock-proxy
-    restart: always
-    ports:
-      - 80:80
-    volumes:
-      - ./db-stock.conf:/etc/nginx/conf.d/db-stock.conf
-      - ./api-stock.conf:/etc/nginx/conf.d/api-stock.conf
     networks:
       - applications-network
 
