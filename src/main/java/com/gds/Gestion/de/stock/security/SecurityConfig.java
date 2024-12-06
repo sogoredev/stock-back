@@ -37,7 +37,7 @@ public class SecurityConfig {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    @Bean
+//    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
